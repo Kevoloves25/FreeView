@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Stream Boxes</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Input Section -->
+        <div id="inputSection" class="input-section active">
+            <h1 class="title">🎬 Video Stream Boxes</h1>
+            <p class="subtitle">Paste a YouTube link and watch it in multiple boxes!</p>
+            
+            <div class="input-group">
+                <input type="text" id="videoUrl" placeholder="Paste YouTube URL here..." class="url-input">
+                <button id="pasteBtn" class="btn paste-btn">
+                    <i class="fas fa-paste"></i> Paste
+                </button>
+            </div>
+            
+            <div class="controls">
+                <select id="boxCount" class="count-select">
+                    <option value="">Choose number of boxes</option>
+                </select>
+                <button id="streamBtn" class="btn stream-btn">
+                    <i class="fas fa-play"></i> Stream Videos
+                </button>
+            </div>
+        </div>
+
+        <!-- Video Grid Section -->
+        <div id="videoSection" class="video-section">
+            <div class="video-header">
+                <button id="newStreamBtn" class="btn new-stream-btn">
+                    <i class="fas fa-plus"></i> New Stream
+                </button>
+                <button id="exitBtn" class="btn exit-btn">
+                    <i class="fas fa-times"></i> Exit
+                </button>
+            </div>
+            <div id="videoGrid" class="video-grid"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="copyright">©2025 | Kevo Loves</p>
+            <div class="social-icons">
+                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
