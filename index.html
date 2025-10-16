@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Stream Boxes</title>
+    <title>Multi-Platform Stream Boxes</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -11,11 +11,22 @@
     <div class="container">
         <!-- Input Section -->
         <div id="inputSection" class="input-section active">
-            <h1 class="title">🎬 Video Stream Boxes</h1>
-            <p class="subtitle">Paste a YouTube link and watch it in multiple boxes!</p>
+            <h1 class="title">🎬 Multi-Platform Stream</h1>
+            <p class="subtitle">Choose platform, paste link, and watch in multiple boxes!</p>
             
+            <div class="platform-group">
+                <select id="platformSelect" class="platform-select">
+                    <option value="">Choose Platform</option>
+                    <option value="youtube">📺 YouTube</option>
+                    <option value="facebook">📘 Facebook</option>
+                    <option value="tiktok">🎵 TikTok</option>
+                    <option value="instagram">📷 Instagram</option>
+                    <option value="twitter">🐦 Twitter/X</option>
+                </select>
+            </div>
+
             <div class="input-group">
-                <input type="text" id="videoUrl" placeholder="Paste YouTube URL here..." class="url-input">
+                <input type="text" id="videoUrl" placeholder="Paste video URL here..." class="url-input">
                 <button id="pasteBtn" class="btn paste-btn">
                     <i class="fas fa-paste"></i> Paste
                 </button>
@@ -29,17 +40,34 @@
                     <i class="fas fa-play"></i> Stream Videos
                 </button>
             </div>
+
+            <div class="platform-hints">
+                <p>💡 <strong>Supported URLs:</strong></p>
+                <div class="hint-list">
+                    <span>YouTube: youtube.com/watch?v=...</span>
+                    <span>Facebook: facebook.com/watch/?v=...</span>
+                    <span>TikTok: tiktok.com/@user/video/...</span>
+                    <span>Instagram: instagram.com/p/...</span>
+                    <span>Twitter: twitter.com/user/status/...</span>
+                </div>
+            </div>
         </div>
 
         <!-- Video Grid Section -->
         <div id="videoSection" class="video-section">
             <div class="video-header">
-                <button id="newStreamBtn" class="btn new-stream-btn">
-                    <i class="fas fa-plus"></i> New Stream
-                </button>
-                <button id="exitBtn" class="btn exit-btn">
-                    <i class="fas fa-times"></i> Exit
-                </button>
+                <div class="stream-info">
+                    <span id="currentPlatform" class="platform-badge"></span>
+                    <span id="currentBoxCount" class="count-badge"></span>
+                </div>
+                <div class="header-buttons">
+                    <button id="newStreamBtn" class="btn new-stream-btn">
+                        <i class="fas fa-plus"></i> New Stream
+                    </button>
+                    <button id="exitBtn" class="btn exit-btn">
+                        <i class="fas fa-times"></i> Exit
+                    </button>
+                </div>
             </div>
             <div id="videoGrid" class="video-grid"></div>
         </div>
