@@ -1,6 +1,6 @@
 class MultiPlatformStreamApp {
     constructor() {
-        this.maxBoxes = 20;
+        this.maxBoxes = 500;
         this.videoUrl = '';
         this.selectedCount = 0;
         this.selectedPlatform = '';
