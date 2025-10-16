@@ -411,3 +411,46 @@ body {
         font-size: 0.8rem;
     }
 }
+
+
+/* Fallback styles for embeds that don't load */
+.embed-fallback {
+    padding: 20px;
+    text-align: center;
+    background: #f8fafc;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.embed-fallback p {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #15803d;
+}
+
+.fallback-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #22c55e;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.fallback-link:hover {
+    background: #16a34a;
+    transform: translateY(-2px);
+}
+
+/* Platform-specific styling */
+.tiktok-embed, .instagram-embed {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.facebook-embed, .twitter-embed {
+    min-height: 200px;
+}
