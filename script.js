@@ -10,31 +10,31 @@ class MultiPlatformStreamApp {
                 name: 'YouTube',
                 icon: '📺',
                 regex: /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/,
-                embed: (url) => this.createYouTubeEmbed(url)
+                embed: (url, index) => this.createYouTubeEmbed(url, index)
             },
             facebook: {
                 name: 'Facebook',
                 icon: '📘',
                 regex: /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.watch)\/.+$/,
-                embed: (url) => this.createFacebookEmbed(url)
+                embed: (url, index) => this.createFacebookEmbed(url, index)
             },
             tiktok: {
                 name: 'TikTok',
                 icon: '🎵',
                 regex: /^(https?:\/\/)?(www\.)?tiktok\.com\/.+/,
-                embed: (url) => this.createTikTokEmbed(url)
+                embed: (url, index) => this.createTikTokEmbed(url, index)
             },
             instagram: {
                 name: 'Instagram',
                 icon: '📷',
                 regex: /^(https?:\/\/)?(www\.)?instagram\.com\/(p|reel)\/.+/,
-                embed: (url) => this.createInstagramEmbed(url)
+                embed: (url, index) => this.createInstagramEmbed(url, index)
             },
             twitter: {
                 name: 'Twitter/X',
                 icon: '🐦',
                 regex: /^(https?:\/\/)?(www\.)?(twitter\.com|x\.com)\/.+/,
-                embed: (url) => this.createTwitterEmbed(url)
+                embed: (url, index) => this.createTwitterEmbed(url, index)
             }
         };
         
@@ -207,6 +207,38 @@ class MultiPlatformStreamApp {
             const videoBox = platform.embed(this.videoUrl, i);
             this.videoGrid.appendChild(videoBox);
         }
+
+        // Load platform-specific embed scripts
+        this.loadEmbedScripts();
+    }
+
+    loadEmbedScripts() {
+        // Load TikTok script
+        if (this.selectedPlatform === 'tiktok' && !window.tiktokScriptLoaded) {
+            const script = document.createElement('script');
+            script.src = 'https://www.tiktok.com/embed.js';
+            script.async = true;
+            document.head.appendChild(script);
+            window.tiktokScriptLoaded = true;
+        }
+
+        // Load Instagram script
+        if (this.selectedPlatform === 'instagram' && !window.instagramScriptLoaded) {
+            const script = document.createElement('script');
+            script.src = 'https://www.instagram.com/embed.js';
+            script.async = true;
+            document.head.appendChild(script);
+            window.instagramScriptLoaded = true;
+        }
+
+        // Load Twitter script
+        if (this.selectedPlatform === 'twitter' && !window.twitterScriptLoaded) {
+            const script = document.createElement('script');
+            script.src = 'https://platform.twitter.com/widgets.js';
+            script.async = true;
+            document.head.appendChild(script);
+            window.twitterScriptLoaded = true;
+        }
     }
 
     // Platform-specific embed creators
@@ -233,13 +265,27 @@ class MultiPlatformStreamApp {
         const videoBox = document.createElement('div');
         videoBox.className = 'video-box facebook-embed';
         
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=0&autoplay=1&mute=1`;
-        iframe.allow = 'autoplay; encrypted-media';
-        iframe.allowFullscreen = true;
-        iframe.title = `Facebook Video ${index + 1}`;
+        // Facebook has very strict embedding rules - use their official embed
+        const container = document.createElement('div');
+        container.className = 'fb-video';
+        container.setAttribute('data-href', url);
+        container.setAttribute('data-width', '100%');
+        container.setAttribute('data-show-text', 'false');
+        container.setAttribute('data-lazy', 'true');
         
-        videoBox.appendChild(iframe);
+        videoBox.appendChild(container);
+        
+        // Add fallback message
+        const fallback = document.createElement('div');
+        fallback.className = 'embed-fallback';
+        fallback.innerHTML = `
+            <p>🎥 Facebook Video</p>
+            <a href="${url}" target="_blank" class="fallback-link">
+                Watch on Facebook
+            </a>
+        `;
+        videoBox.appendChild(fallback);
+        
         return videoBox;
     }
 
@@ -247,24 +293,29 @@ class MultiPlatformStreamApp {
         const videoBox = document.createElement('div');
         videoBox.className = 'video-box tiktok-embed';
         
+        // TikTok official embed
         const blockquote = document.createElement('blockquote');
         blockquote.className = 'tiktok-embed';
         blockquote.setAttribute('cite', url);
         blockquote.setAttribute('data-video-id', `tiktok-${index}`);
+        blockquote.style.width = '100%';
+        blockquote.style.maxWidth = '100%';
         
         const section = document.createElement('section');
         blockquote.appendChild(section);
         
         videoBox.appendChild(blockquote);
         
-        // Load TikTok embed script if not already loaded
-        if (!window.tiktokEmbedLoaded) {
-            const script = document.createElement('script');
-            script.src = 'https://www.tiktok.com/embed.js';
-            script.async = true;
-            document.head.appendChild(script);
-            window.tiktokEmbedLoaded = true;
-        }
+        // Add fallback
+        const fallback = document.createElement('div');
+        fallback.className = 'embed-fallback';
+        fallback.innerHTML = `
+            <p>🎵 TikTok Video</p>
+            <a href="${url}" target="_blank" class="fallback-link">
+                Watch on TikTok
+            </a>
+        `;
+        videoBox.appendChild(fallback);
         
         return videoBox;
     }
@@ -273,21 +324,26 @@ class MultiPlatformStreamApp {
         const videoBox = document.createElement('div');
         videoBox.className = 'video-box instagram-embed';
         
+        // Instagram official embed
         const blockquote = document.createElement('blockquote');
         blockquote.className = 'instagram-media';
         blockquote.setAttribute('data-instgrm-permalink', url);
         blockquote.setAttribute('data-instgrm-version', '14');
+        blockquote.style.width = '100%';
+        blockquote.style.maxWidth = '100%';
         
         videoBox.appendChild(blockquote);
         
-        // Load Instagram embed script if not already loaded
-        if (!window.instagramEmbedLoaded) {
-            const script = document.createElement('script');
-            script.src = 'https://www.instagram.com/embed.js';
-            script.async = true;
-            document.head.appendChild(script);
-            window.instagramEmbedLoaded = true;
-        }
+        // Add fallback
+        const fallback = document.createElement('div');
+        fallback.className = 'embed-fallback';
+        fallback.innerHTML = `
+            <p>📷 Instagram Post</p>
+            <a href="${url}" target="_blank" class="fallback-link">
+                View on Instagram
+            </a>
+        `;
+        videoBox.appendChild(fallback);
         
         return videoBox;
     }
@@ -296,6 +352,7 @@ class MultiPlatformStreamApp {
         const videoBox = document.createElement('div');
         videoBox.className = 'video-box twitter-embed';
         
+        // Twitter official embed
         const blockquote = document.createElement('blockquote');
         blockquote.className = 'twitter-tweet';
         
@@ -305,15 +362,16 @@ class MultiPlatformStreamApp {
         
         videoBox.appendChild(blockquote);
         
-        // Load Twitter embed script if not already loaded
-        if (!window.twitterEmbedLoaded) {
-            const script = document.createElement('script');
-            script.src = 'https://platform.twitter.com/widgets.js';
-            script.async = true;
-            script.charset = 'utf-8';
-            document.head.appendChild(script);
-            window.twitterEmbedLoaded = true;
-        }
+        // Add fallback
+        const fallback = document.createElement('div');
+        fallback.className = 'embed-fallback';
+        fallback.innerHTML = `
+            <p>🐦 Twitter Post</p>
+            <a href="${url}" target="_blank" class="fallback-link">
+                View on Twitter
+            </a>
+        `;
+        videoBox.appendChild(fallback);
         
         return videoBox;
     }
